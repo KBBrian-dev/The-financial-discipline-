@@ -3,97 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenSpend | Zenith Core</title>
+    <title>ZenSpend | Master Sovereign</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --logic: #22d3ee; --emotion: #f43f5e; --bg: #0f172a; --card: #1e293b; }
-        body { background: var(--bg); color: #f1f5f9; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
-        
-        /* DYNAMIC AURA BACKGROUND */
-        .aura { position: fixed; inset: 0; z-index: -1; transition: 2s all ease;
-            background: radial-gradient(circle at 0% 0%, var(--aura-1, rgba(34, 211, 238, 0.05)) 0%, transparent 50%),
-                        radial-gradient(circle at 100% 100%, var(--aura-2, rgba(99, 102, 241, 0.05)) 0%, transparent 50%);
+        :root { --neon-cyan: #00f2fe; --neon-pink: #ff007f; --obsidian: #030712; }
+        body { background-color: var(--obsidian); color: #e2e8f0; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+
+        .cyber-grid {
+            position: fixed; inset: 0; z-index: -2;
+            background-image: linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .aura-glow {
+            position: fixed; inset: 0; z-index: -1; transition: 2s all ease;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 242, 254, 0.08) 0%, transparent 60%);
         }
 
-        /* GEOMETRIC SHAPES */
-        .pro-glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
-        .shape-prism { clip-path: polygon(3% 0, 100% 0, 97% 100%, 0 100%); }
-        .shape-hex { clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); }
-
-        /* ANIMATIONS */
-        .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s all ease; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px;
+            transition: 0.3s border-color;
+        }
+        .glass-panel:hover { border-color: var(--neon-cyan); }
         
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.98); z-index: 1000; align-items: center; justify-content: center; flex-direction: column; padding: 2rem; }
+        .shape-prism { clip-path: polygon(4% 0, 100% 0, 96% 100%, 0 100%); }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        .modal-overlay { 
+            display: none; position: fixed; inset: 0; background: rgba(3, 7, 18, 0.98); 
+            z-index: 1000; align-items: center; justify-content: center; flex-direction: column; 
+        }
+        
+        .reveal { opacity: 0; transform: translateY(20px); transition: 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body class="p-4 lg:p-12">
 
-    <div class="aura" id="aura"></div>
+    <div class="cyber-grid"></div>
+    <div class="aura-glow" id="aura"></div>
 
     <div id="timerOverlay" class="modal-overlay">
-        <h2 class="text-xs font-black uppercase tracking-[0.4em] mb-4 text-slate-500">Cooling Amygdala Response...</h2>
-        <div id="countdown" class="text-9xl font-800 text-cyan-400">10</div>
-        <p class="mt-8 text-slate-400 italic text-sm text-center">Is this a genuine need or a temporary dopamine spike?</p>
+        <h2 class="text-xs font-black uppercase tracking-[0.5em] mb-4 text-slate-500">Wait a moment...</h2>
+        <div id="countdown" class="text-9xl font-800 text-transparent bg-clip-text bg-gradient-to-b from-cyan-400 to-blue-600">10</div>
+        <p class="mt-8 text-slate-400 italic text-sm text-center px-4">Take a deep breath. <br> Do you really want this, or are you just bored?</p>
     </div>
 
     <div id="resetModal" class="modal-overlay">
-        <h2 class="text-2xl font-800 mb-6">PREFRONTAL CORTEX VERIFICATION</h2>
-        <p id="logicQuestion" class="text-lg font-bold mb-6 text-cyan-400"></p>
-        <input id="logicAnswer" type="number" class="bg-slate-800 p-4 rounded-xl mb-6 outline-none border border-slate-700" placeholder="Result">
-        <button onclick="checkLogic()" class="bg-cyan-500 text-black px-10 py-4 rounded-xl font-800 text-xs uppercase tracking-widest">Verify Logic</button>
-        <button onclick="closeReset()" class="mt-4 text-[10px] font-bold text-slate-500 uppercase">Cancel</button>
+        <div class="glass-panel p-12 text-center max-w-md border-t-4 border-pink-500">
+            <h2 class="text-xl font-800 mb-6 tracking-widest uppercase">Safety Check</h2>
+            <p id="logicQuestion" class="text-slate-400 mb-6">Solve this to clear your data:</p>
+            <input id="logicAnswer" type="number" class="w-full bg-slate-900/50 p-4 rounded-xl mb-6 border border-white/10 outline-none text-center text-xl text-white">
+            <button onclick="checkLogic()" class="w-full bg-pink-600 text-white py-4 rounded-xl font-800 text-xs uppercase tracking-widest">Clear Everything</button>
+            <button onclick="closeReset()" class="mt-6 text-[10px] text-slate-500 uppercase font-bold">Go Back</button>
+        </div>
     </div>
 
-    <div class="max-w-7xl mx-auto space-y-16">
+    <div class="max-w-7xl mx-auto space-y-12">
         
-        <nav class="pro-glass p-8 rounded-[2.5rem] flex flex-col md:flex-row justify-between items-center sticky top-6 z-50 shadow-2xl">
+        <nav class="glass-panel p-8 flex flex-col md:flex-row justify-between items-center sticky top-6 z-50">
             <div class="text-center md:text-left">
-                <h1 class="text-3xl font-800 tracking-tighter uppercase italic">ZenSpend<span class="text-cyan-400">.</span></h1>
-                <p id="rank-name" class="text-[10px] font-black text-cyan-500 tracking-[0.3em] uppercase">Stage: Acolyte</p>
+                <h1 class="text-3xl font-800 tracking-tighter uppercase italic text-cyan-400">ZenSpend<span class="text-white">.</span></h1>
+                <p id="rank-name" class="text-[10px] font-black text-slate-400 tracking-[0.2em] uppercase mt-1">Level: Beginner</p>
             </div>
             <div class="hidden lg:block flex-1 mx-10 text-center">
-                <div id="wisdom-bar" class="text-[10px] font-bold text-slate-400 italic uppercase">System Ready: Awaiting Input...</div>
+                <div id="wisdom-bar" class="text-[10px] font-bold text-slate-500 italic uppercase tracking-widest">Ready to save money?</div>
             </div>
-            <div id="nav-score" class="w-14 h-14 rounded-full border-2 border-cyan-500/20 flex items-center justify-center font-800 text-cyan-400 text-xl">100</div>
+            <div id="nav-score" class="w-16 h-16 rounded-2xl border border-white/10 bg-white/5 flex items-center justify-center font-800 text-cyan-400 text-2xl mono">100</div>
         </nav>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
             
             <div class="lg:col-span-8 space-y-12">
-                <section class="pro-glass p-12 rounded-[4rem] reveal relative overflow-hidden">
+                <section class="glass-panel p-12 reveal border-r-4 border-cyan-500/30">
                     <div class="flex flex-col md:flex-row items-center justify-between gap-10">
                         <div class="flex-1">
-                            <h2 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Neural Resonance</h2>
-                            <div class="text-9xl font-800 tracking-tighter text-white" id="mainScore">100</div>
-                            <svg class="w-full h-12 mt-4 opacity-30" id="sparkline" viewBox="0 0 200 50">
-                                <path id="flux-path" d="M0 25 L200 25" stroke="#22d3ee" stroke-width="2" fill="none" />
+                            <h2 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Your Saving Score</h2>
+                            <div class="text-9xl font-800 tracking-tighter text-white mono" id="mainScore">100</div>
+                            <svg class="w-full h-12 mt-6 opacity-40" id="sparkline" viewBox="0 0 200 50">
+                                <path id="flux-path" d="M0 25 L200 25" stroke="var(--neon-cyan)" stroke-width="3" fill="none" />
                             </svg>
                         </div>
-                        <div class="w-full md:w-72 space-y-6">
+                        <div class="w-full md:w-80 space-y-8">
                             <div>
-                                <p class="text-[10px] font-bold text-slate-500 uppercase">10Y Opportunity Cost</p>
-                                <div id="opp-cost" class="text-5xl font-800 text-cyan-400 tracking-tighter">$0.00</div>
+                                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">What this costs in 10 years</p>
+                                <div id="opp-cost" class="text-5xl font-800 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mono">$0.00</div>
                             </div>
                             <div>
-                                <p class="text-[10px] font-bold text-slate-500 uppercase">Life-Hours Spent</p>
-                                <div id="time-leak" class="text-2xl font-800 text-slate-300 tracking-tighter">0.0 hrs</div>
-                                <div class="h-1 w-full bg-slate-800 rounded-full mt-2"><div id="pBar" class="h-full bg-cyan-400 transition-all duration-1000" style="width: 100%"></div></div>
+                                <div class="flex justify-between text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">
+                                    <span>Time spent working for this</span>
+                                    <span id="time-leak" class="text-slate-300">0.0 hrs</span>
+                                </div>
+                                <div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                                    <div id="pBar" class="h-full bg-cyan-400 transition-all duration-1000" style="width: 100%"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <section class="pro-glass shape-prism p-16 reveal border-t-8 border-cyan-500">
+                <section class="glass-panel shape-prism p-16 reveal border-b-8 border-cyan-500 shadow-2xl">
                     <div class="max-w-xl mx-auto space-y-8">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <input id="item" type="text" placeholder="Entry Label" class="bg-slate-800 p-5 rounded-2xl outline-none focus:ring-1 focus:ring-cyan-500 border-none text-white">
-                            <input id="amount" type="number" placeholder="Cost ($)" class="bg-slate-800 p-5 rounded-2xl outline-none focus:ring-1 focus:ring-cyan-500 border-none text-white">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">What did you buy?</label>
+                                <input id="item" type="text" placeholder="e.g. Coffee" class="w-full bg-slate-900/50 p-5 rounded-2xl outline-none border border-white/5 text-white">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">How much?</label>
+                                <input id="amount" type="number" placeholder="$0.00" class="w-full bg-slate-900/50 p-5 rounded-2xl outline-none border border-white/5 text-white">
+                            </div>
                         </div>
                         <div class="flex gap-4">
-                            <button onclick="processEntry(true)" class="flex-1 bg-white text-slate-900 p-5 rounded-2xl font-800 text-xs uppercase tracking-widest hover:bg-cyan-400 transition">Logic (Asset)</button>
-                            <button onclick="processEntry(false)" class="flex-1 bg-rose-600 text-white p-5 rounded-2xl font-800 text-xs uppercase tracking-widest hover:bg-rose-500 transition">Impulse (Leak)</button>
+                            <button onclick="processEntry(true)" class="flex-1 bg-white text-black p-5 rounded-2xl font-800 text-xs uppercase tracking-widest hover:bg-cyan-400 transition-all">I Need This</button>
+                            <button onclick="processEntry(false)" class="flex-1 bg-slate-800 text-white p-5 rounded-2xl font-800 text-xs uppercase tracking-widest hover:bg-pink-600 transition-all">I Just Want It</button>
                         </div>
                     </div>
                 </section>
@@ -102,22 +127,22 @@
             </div>
 
             <aside class="lg:col-span-4 space-y-10">
-                <div class="pro-glass shape-hex p-12 text-center reveal border-b-4 border-cyan-500/20">
-                    <p class="text-[10px] font-black text-slate-500 uppercase mb-2">Total Energy Leakage</p>
-                    <h4 id="leak-val" class="text-4xl font-800 text-white">$0.00</h4>
+                <div class="glass-panel p-10 text-center reveal border-l-4 border-pink-500/40">
+                    <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Total "Just Want" Spending</p>
+                    <h4 id="leak-val" class="text-4xl font-800 text-white mono">$0.00</h4>
                 </div>
 
-                <div class="pro-glass p-8 rounded-[3rem] reveal">
-                    <h4 class="text-xs font-black text-slate-500 uppercase mb-6">Habit Consistency Grid</h4>
+                <div class="glass-panel p-8 reveal">
+                    <h4 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-6">Spending History Map</h4>
                     <div class="grid grid-cols-7 gap-2" id="heatmap"></div>
                 </div>
 
-                <div class="pro-glass p-8 rounded-[3rem] reveal">
-                    <h4 class="text-xs font-bold text-cyan-400 mb-4 uppercase">Neural Journal</h4>
-                    <textarea id="journal" oninput="saveJournal()" class="w-full bg-transparent border-none text-sm h-40 italic text-slate-400 outline-none resize-none" placeholder="Describe the subconscious urge..."></textarea>
+                <div class="glass-panel p-8 reveal">
+                    <h4 class="text-xs font-bold text-cyan-400 mb-4 uppercase tracking-widest">Personal Notes</h4>
+                    <textarea id="journal" oninput="saveJournal()" class="w-full bg-transparent border-none text-sm h-40 italic text-slate-400 outline-none resize-none" placeholder="Why did I feel like buying this?"></textarea>
                 </div>
 
-                <button onclick="startReset()" class="w-full py-4 text-[9px] font-black text-slate-600 uppercase hover:text-rose-500 transition tracking-[0.4em]">Initialize Neural Reset</button>
+                <button onclick="startReset()" class="w-full py-4 text-[9px] font-black text-slate-600 uppercase hover:text-pink-500 transition-all tracking-[0.4em]">Reset My Progress</button>
             </aside>
         </div>
     </div>
@@ -129,10 +154,10 @@
         let logicAns = 0;
 
         const wisdom = [
-            "Neural pruning: What you don't spend on, you forget to want.",
-            "Dopamine is for pursuit, not satisfaction. Recognize the trick.",
-            "Wealth is the accumulation of unspent vital energy.",
-            "Discipline is the highest expression of free will."
+            "Saving money is a superpower.",
+            "Buying things doesn't make you happy for long.",
+            "True wealth is having control over your time.",
+            "Think before you spend. Your future self will thank you."
         ];
 
         function processEntry(isNeed) {
@@ -152,11 +177,15 @@
             const item = document.getElementById('item').value;
             const amount = document.getElementById('amount').value;
             if(!item || !amount) return;
-            isNeed ? score = Math.min(100, score + 5) : score = Math.max(0, score - Math.floor(amount/4));
+            
+            // Score logic: Gain for needs, Lose for wants based on price
+            isNeed ? score = Math.min(100, score + 4) : score = Math.max(0, score - Math.floor(amount/5));
             logs.push({item, amount, isNeed, date: new Date().toLocaleTimeString()});
             scoreHistory.push(score);
             if(scoreHistory.length > 20) scoreHistory.shift();
+            
             document.getElementById('wisdom-bar').innerText = wisdom[Math.floor(Math.random()*wisdom.length)];
+            document.getElementById('item').value = ''; document.getElementById('amount').value = '';
             updateUI();
         }
 
@@ -170,33 +199,36 @@
             logs.forEach(log => {
                 if(!log.isNeed) totalLeak += parseFloat(log.amount);
                 const card = document.createElement('div');
-                card.className = "pro-glass p-8 rounded-[3rem] flex justify-between items-center reveal active transition-all border-l-8 " + (log.isNeed ? 'border-cyan-500' : 'border-rose-500');
-                card.innerHTML = `<div><p class="font-800 text-white">${log.item}</p><p class="text-[9px] text-slate-500 uppercase font-black">${log.isNeed?'Logic':'Impulse'}</p></div><p class="text-2xl font-800">$${log.amount}</p>`;
+                card.className = "glass-panel p-8 flex justify-between items-center reveal active transition-all " + (log.isNeed ? 'border-l-4 border-cyan-400' : 'border-l-4 border-pink-600');
+                card.innerHTML = `<div><p class="font-800 text-white text-lg">${log.item}</p><p class="text-[9px] text-slate-500 uppercase font-black">${log.isNeed?'Essential':'Impulse'}</p></div><p class="text-2xl font-800 text-white mono">$${log.amount}</p>`;
                 feed.prepend(card);
             });
 
             document.getElementById('leak-val').innerText = `$${totalLeak.toFixed(2)}`;
-            document.getElementById('opp-cost').innerText = `$${(totalLeak * 2.15).toFixed(2)}`;
+            document.getElementById('opp-cost').innerText = `$${(totalLeak * 2.8).toFixed(2)}`;
             document.getElementById('time-leak').innerText = (totalLeak / 20).toFixed(1) + " hrs";
 
-            // Sparkline Draw
+            // Draw Sparkline
             const path = document.getElementById('flux-path');
             let d = "M 0 " + (50 - scoreHistory[0]/2);
             scoreHistory.forEach((s, i) => { d += ` L ${(i * 10)} ${(50 - s/2)}`; });
             path.setAttribute('d', d);
 
-            // Aura & Rank
-            document.getElementById('aura').style.setProperty('--aura-1', score > 75 ? 'rgba(34, 211, 238, 0.1)' : 'rgba(244, 63, 94, 0.1)');
-            document.getElementById('rank-name').innerText = score === 100 ? "Stage: Zenith Sovereign" : (score > 75 ? "Stage: Sentinel" : "Stage: Acolyte");
+            // Aura Color Shift
+            document.getElementById('aura').style.background = `radial-gradient(circle at 50% 50%, ${score > 70 ? 'rgba(0, 242, 254, 0.08)' : 'rgba(255, 0, 127, 0.08)'} 0%, transparent 60%)`;
+            
+            // Sovereign Levels
+            document.getElementById('rank-name').innerText = score === 100 ? "Level: Master Saver" : (score > 70 ? "Level: Doing Great" : "Level: Needs Work");
 
-            // Heatmap
+            // Heatmap Rendering
             const heat = document.getElementById('heatmap'); heat.innerHTML = '';
             for(let i=0; i<28; i++) {
-                const b = document.createElement('div'); b.className = `h-4 rounded-sm ${i < logs.length ? 'bg-cyan-500' : 'bg-slate-800'}`;
+                const b = document.createElement('div'); b.className = `h-3 rounded-[2px] ${i < logs.length ? 'bg-cyan-400' : 'bg-white/5'}`;
                 heat.appendChild(b);
             }
 
-            localStorage.setItem('zenScore', score); localStorage.setItem('zenLogs', JSON.stringify(logs));
+            localStorage.setItem('zenScore', score); 
+            localStorage.setItem('zenLogs', JSON.stringify(logs));
             localStorage.setItem('zenHistory', JSON.stringify(scoreHistory));
             initReveal();
         }
@@ -204,12 +236,12 @@
         function startReset() {
             const n1 = Math.floor(Math.random()*20), n2 = Math.floor(Math.random()*20);
             logicAns = n1 + n2;
-            document.getElementById('logicQuestion').innerText = `What is ${n1} + ${n2}?`;
+            document.getElementById('logicQuestion').innerText = `Solve this to confirm: ${n1} + ${n2}`;
             document.getElementById('resetModal').style.display = 'flex';
         }
         function checkLogic() {
             if(parseInt(document.getElementById('logicAnswer').value) === logicAns) { localStorage.clear(); location.reload(); }
-            else { alert("Verification Failed."); closeReset(); }
+            else { alert("Wrong answer!"); closeReset(); }
         }
         function closeReset() { document.getElementById('resetModal').style.display = 'none'; }
         function saveJournal() { localStorage.setItem('zenJournal', document.getElementById('journal').value); }
