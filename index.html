@@ -1,185 +1,167 @@
-<!DOCTYPE html>
+        <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenSpend | Galactic Surface</title>
+    <title>ZenSpend | Daybreak</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --neon: #00f2fe; --royal: #7c3aed; }
+        :root { --accent: #4f46e5; --logic: #06b6d4; --emotion: #f43f5e; }
+        
         body { 
-            background: #030014; color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif;
-            transition: 0.3s background ease; overflow-x: hidden;
+            margin: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(125deg, #f0f9ff 0%, #e0e7ff 50%, #f5f3ff 100%);
+            color: #1e293b;
+            min-height: 100vh;
         }
-        
-        /* 1. FUTURISTIC BACKGROUND */
-        .parallax-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
-            background-image: linear-gradient(rgba(3,0,20,0.8), rgba(3,0,20,1)),
-                              url('https://images.unsplash.com/photo-1599672721868-b76bb06b3a01?q=80&w=2000');
-            background-size: cover; background-position: center; filter: blur(5px);
-        }
-        
-        /* 2. HIGH-CONTRAST NEON-GLASS SURFACE */
-        .neon-glass { 
-            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .neon-glass:hover { border-color: var(--neon); box-shadow: 0 0 30px rgba(0, 242, 254, 0.15); }
-        
-        /* 3. DYNAMIC SHAPES (MOD MOBILE, WIDE DESKTOP) */
-        .shape-slant { clip-path: polygon(0 8%, 100% 0, 100% 92%, 0 100%); }
-        .shape-blob { border-radius: 40% 60% 70% 30% / 40% 40% 60% 60%; }
 
-        .reveal { opacity: 0; transform: translateY(40px); transition: 1s all ease; }
+        /* 1. ANIMATED MESH GRADIENT BACKGROUND */
+        .mesh-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: 
+                radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(124, 58, 237, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.1) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(79, 70, 229, 0.1) 0px, transparent 50%);
+        }
+
+        /* 2. BRIGHT FROSTED GLASS */
+        .frosted-glass {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.05);
+            transition: all 0.4s ease;
+        }
+        .frosted-glass:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: translateY(-2px);
+        }
+
+        /* 3. SHAPES THAT POP */
+        .shape-slant { clip-path: polygon(0 5%, 100% 0, 100% 95%, 0 100%); }
+        .shape-blob { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+
+        .reveal { opacity: 0; transform: translateY(20px); transition: 0.8s all ease; }
         .reveal.active { opacity: 1; transform: translateY(0); }
         
-        /* Modal Base */
-        #insightModal { 
-            display: none; position: fixed; inset: 0; z-index: 100;
-            background: rgba(3, 0, 20, 0.98); align-items: center; justify-content: center; padding: 2rem;
+        .gradient-text {
+            background: linear-gradient(to right, var(--accent), var(--logic));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
     </style>
 </head>
-<body class="p-0">
+<body class="p-4 md:p-10">
 
-    <div class="parallax-bg" id="parallax"></div>
+    <div class="mesh-bg"></div>
 
-    <div id="insightModal">
-        <div class="neon-glass p-12 rounded-[3.5rem] text-center max-w-xl border-t-4 border-cyan-400">
-            <h2 class="text-2xl font-800 text-cyan-400 mb-6 tracking-tighter uppercase">Subconscious Breakthrough</h2>
+    <div class="max-w-6xl mx-auto space-y-12">
+        
+        <nav class="frosted-glass p-6 rounded-[2rem] flex justify-between items-center sticky top-4 z-50">
+            <h1 class="text-2xl font-800 tracking-tighter gradient-text uppercase">ZenSpend</h1>
+            <div class="flex gap-4">
+                <span id="score-val" class="bg-indigo-600 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg shadow-indigo-200">100 PTS</span>
+            </div>
+        </nav>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
             
-            [attachment_0](attachment)
-            <p id="insightContent" class="text-sm text-slate-300 leading-relaxed italic mb-10"></p>
-            
-            <button onclick="closeModal()" class="bg-white text-black px-8 py-3 rounded-full font-800 text-xs uppercase tracking-widest active:scale-95 transition">Acknowledge</button>
-        </div>
-    </div>
+            <div class="lg:col-span-7 space-y-10">
+                
+                <section class="text-center md:text-left reveal">
+                    <div class="inline-block relative">
+                        <div class="w-40 h-40 rounded-full bg-white flex items-center justify-center shadow-xl border-4 border-indigo-50 relative z-10">
+                            <h2 class="text-6xl font-800 text-slate-800" id="mainScore">100</h2>
+                        </div>
+                        <div class="absolute -inset-4 bg-indigo-200/30 rounded-full blur-xl animate-pulse"></div>
+                    </div>
+                    <p class="mt-6 text-slate-500 font-medium italic">"Discipline is the bridge between goals and accomplishment."</p>
+                </section>
 
-    <nav class="sticky top-0 z-50 neon-glass m-4 rounded-2xl px-10 py-6 flex justify-between items-center max-w-7xl mx-auto">
-        <h1 class="text-2xl font-800 tracking-tighter uppercase italic">ZEN<span class="text-cyan-400">SPEND</span></h1>
-        <div id="score-pill" class="text-cyan-400 border border-cyan-400/50 px-4 py-1 rounded-full text-xs font-bold">100 PTS</div>
-    </nav>
+                <section class="frosted-glass shape-slant p-12 reveal">
+                    <h3 class="text-lg font-800 text-slate-800 mb-6">Capture Energy</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <input id="item" type="text" placeholder="Entry Label" class="bg-white/50 p-4 rounded-xl border-none focus:ring-2 focus:ring-indigo-400 outline-none">
+                        <input id="amount" type="number" placeholder="Value ($)" class="bg-white/50 p-4 rounded-xl border-none focus:ring-2 focus:ring-indigo-400 outline-none">
+                    </div>
+                    <div class="flex gap-4">
+                        <button onclick="addEntry(true)" class="flex-1 bg-slate-900 text-white py-4 rounded-xl font-800 text-xs uppercase hover:bg-slate-800 transition">Logic (Need)</button>
+                        <button onclick="addEntry(false)" class="flex-1 bg-indigo-600 text-white py-4 rounded-xl font-800 text-xs uppercase hover:bg-indigo-500 transition shadow-lg shadow-indigo-200">Emotion (Want)</button>
+                    </div>
+                </section>
 
-    <main class="max-w-7xl mx-auto py-20 px-6 grid grid-cols-1 lg:grid-cols-12 gap-10">
+                <div id="feed" class="space-y-6">
+                    </div>
+            </div>
 
-        <div class="lg:col-span-7 space-y-10">
-            
-            <section class="text-center md:text-left reveal">
-                <div class="inline-block relative p-4">
-                    <div class="w-48 h-48 rounded-full border-2 border-dashed border-cyan-400/20 absolute inset-0 animate-spin-slow opacity-30"></div>
-                    <div class="text-center relative z-10">
-                        <h2 class="text-8xl font-800" id="mainScore">100</h2>
-                        <p class="text-[10px] text-slate-500 font-black uppercase tracking-[0.3em]">Frequency</p>
+            <aside class="lg:col-span-5 space-y-10">
+                
+                <div class="frosted-glass p-8 rounded-[2.5rem] reveal">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Monthly Leakage</p>
+                    <h4 id="total-val" class="text-4xl font-800 text-slate-800">$0.00</h4>
+                    <div class="mt-6 h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                        <div id="pBar" class="h-full bg-indigo-500 transition-all duration-1000" style="width: 100%"></div>
                     </div>
                 </div>
-                <p class="mt-8 text-slate-300 italic text-sm">"By delaying a purchase, you are strengthening your prefrontal cortex."</p>
-            </section>
 
-            <section class="neon-glass shape-slant p-16 reveal">
-                <h3 class="text-xl font-800 tracking-tight mb-6">Log Energy Flux</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
-                    <input id="item" type="text" placeholder="Entry Label" class="bg-black/40 p-5 rounded-xl outline-none border border-white/10 focus:border-cyan-400 text-white">
-                    <input id="amount" type="number" placeholder="Cost ($)" class="bg-black/40 p-5 rounded-xl outline-none border border-white/10 focus:border-cyan-400 text-white">
+                <div class="frosted-glass p-8 rounded-[2.5rem] reveal">
+                    <h4 class="text-xs font-800 text-slate-800 mb-4">Mind-Finance Journal</h4>
+                    <textarea id="journal" oninput="saveJournal()" class="w-full bg-transparent border-none focus:ring-0 text-sm h-32 italic text-slate-500" placeholder="Note the subconscious trigger..."></textarea>
                 </div>
-                <div class="flex gap-4 flex-col md:flex-row">
-                    <button onclick="addEntry(true)" class="flex-1 bg-white text-black py-4 rounded-xl font-800 text-xs uppercase active:scale-95 transition">Logic (Need)</button>
-                    <button onclick="addEntry(false)" class="flex-1 bg-royal text-white py-4 rounded-xl font-800 text-xs uppercase active:scale-95 transition">Impulse (Want)</button>
-                </div>
-            </section>
 
-            <div id="feed" class="space-y-4">
-                </div>
+            </aside>
         </div>
-
-        <aside class="lg:col-span-5 lg:sticky lg:top-36 self-start space-y-10">
-            
-            <div class="neon-glass p-8 rounded-[2.5rem] reveal">
-                <div class="flex justify-between items-center mb-6">
-                    <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Total Energy Leakage</span>
-                    <span id="total-val" class="text-rose-400 font-bold">$0.00</span>
-                </div>
-                <div class="h-1 bg-white/5 rounded-full overflow-hidden">
-                    <div id="pBar" class="h-full bg-cyan-400 transition-all duration-1000" style="width: 100%"></div>
-                </div>
-            </div>
-
-            <div class="neon-glass p-8 rounded-[2.5rem] reveal">
-                <h4 class="text-xs font-bold uppercase tracking-widest text-cyan-400 mb-4">Thought Log</h4>
-                <textarea id="journal" oninput="saveJournal()" class="w-full bg-transparent text-xs h-32 outline-none placeholder:text-slate-700 resize-none border-b border-white/5" placeholder="Record the emotion behind your last purchase..."></textarea>
-            </div>
-        </aside>
-    </main>
+    </div>
 
     <script>
         let score = parseInt(localStorage.getItem('zenScore')) || 100;
         let logs = JSON.parse(localStorage.getItem('zenLogs')) || [];
-        const insights = [
-            "Neuroplasticity is your super-power. When you hit 'Essential', you are firing the prefrontal cortex, which physically changes your brain's structure for long-term willpower.",
-            "That 'Want' urge? It’s a legacy of Evolutionary Biology. Your ancestors survived by reacting to immediate rewards. Today, your prefrontal cortex overrides this ancient survival loop.",
-            "Energy and Entropy: In physics, entropy is natural disorder. Your finances are the same. Discipline (Logic) is the vital energy you inject into your system to maintain financial order."
-        ];
-
-        // Parallax Effect
-        window.addEventListener('scroll', () => {
-            const parallax = document.getElementById('parallax');
-            parallax.style.backgroundPositionY = -(window.scrollY * 0.2) + 'px';
-        });
 
         function updateUI() {
             document.getElementById('mainScore').innerText = score;
+            document.getElementById('score-val').innerText = `${score} PTS`;
             document.getElementById('pBar').style.width = score + "%";
             
             const feed = document.getElementById('feed');
             feed.innerHTML = '';
-            let total = 0, wants = 0;
+            let total = 0;
 
             logs.forEach(log => {
                 total += parseFloat(log.amount);
-                if(!log.isNeed) wants += parseFloat(log.amount);
-
                 const card = document.createElement('div');
-                // APPLY UNIQUE BLOB SHAPE PER CATEGORY
-                card.className = "neon-glass p-8 group transition-all duration-500 " + (log.isNeed ? 'shape-blob border-emerald-500 hover:bg-emerald-500/10' : 'shape-blob border-rose-500 hover:bg-rose-500/10');
+                card.className = "frosted-glass p-6 rounded-[2rem] flex justify-between items-center reveal active " + (log.isNeed ? 'border-l-8 border-cyan-400' : 'shape-blob border-l-8 border-rose-400');
                 card.innerHTML = `
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <p class="font-800 text-white">${log.item}</p>
-                            <p class="text-[9px] text-slate-500 uppercase tracking-widest font-black">${log.isNeed ? 'Logical Energy' : 'Subconscious Urge'}</p>
-                        </div>
-                        <p class="text-2xl font-800 ${log.isNeed ? 'text-emerald-400' : 'text-rose-400'}">$${log.amount}</p>
+                    <div>
+                        <p class="font-800 text-slate-800">${log.item}</p>
+                        <p class="text-[9px] text-slate-400 uppercase font-bold">${log.isNeed ? 'Logical Asset' : 'Subconscious Urge'}</p>
                     </div>
+                    <p class="text-2xl font-800 ${log.isNeed ? 'text-cyan-600' : 'text-rose-500'}">$${log.amount}</p>
                 `;
                 feed.prepend(card);
             });
 
             document.getElementById('total-val').innerText = `$${total.toFixed(2)}`;
-            if(score >= 100) triggerInsight();
-            initScrollReveal();
-            localStorage.setItem('zenScore', score); localStorage.setItem('zenLogs', JSON.stringify(logs));
+            localStorage.setItem('zenScore', score);
+            localStorage.setItem('zenLogs', JSON.stringify(logs));
+            initReveal();
         }
 
         function addEntry(isNeed) {
             const item = document.getElementById('item').value;
             const amount = document.getElementById('amount').value;
             if(!item || !amount) return;
-            isNeed ? score = Math.min(100, score + 4) : score = Math.max(0, score - Math.floor(amount/2.5));
+            isNeed ? score = Math.min(100, score + 5) : score = Math.max(0, score - Math.floor(amount/3));
             logs.push({item, amount, isNeed});
             document.getElementById('item').value = ''; document.getElementById('amount').value = '';
             updateUI();
         }
 
-        function triggerInsight() {
-            const randomInsight = insights[Math.floor(Math.random() * insights.length)];
-            document.getElementById('insightContent').innerText = randomInsight;
-            document.getElementById('insightModal').style.display = 'flex';
-        }
-        function closeModal() { document.getElementById('insightModal').style.display = 'none'; }
         function saveJournal() { localStorage.setItem('zenJournal', document.getElementById('journal').value); }
-        function initScrollReveal() {
-            const obs = new IntersectionObserver((e) => { e.forEach(x => { if(x.isIntersecting) x.target.classList.add('active'); }); }, { threshold: 0.1 });
+        function initReveal() {
+            const obs = new IntersectionObserver((e) => { e.forEach(x => { if(x.isIntersecting) x.target.classList.add('active'); }); });
             document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
         }
 
