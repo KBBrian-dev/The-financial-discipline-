@@ -3,95 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenSpend | Discipline Tracker</title>
+    <title>ZenSpend | Discovery Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; }
-        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        body { 
+            background: #020617; 
+            color: #f8fafc; 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(15px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+        }
+        .scroll-section { scroll-snap-type: x mandatory; }
+        .snap-item { scroll-snap-align: start; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 10px; }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="pb-10">
 
-    <div class="max-w-md mx-auto space-y-6">
-        <header class="text-center">
-            <h1 class="text-3xl font-bold text-emerald-400">ZenSpend</h1>
-            <p class="text-slate-400 text-sm italic">Master your money, master your mind.</p>
-        </header>
+    <nav class="sticky top-0 z-50 glass-card px-6 py-4 flex justify-between items-center">
+        <h1 class="font-800 text-xl tracking-tighter">ZEN<span class="text-emerald-500">SPEND</span></h1>
+        <div id="grade-badge" class="text-[10px] font-bold border border-emerald-500/50 px-2 py-1 rounded">SCORE: 100</div>
+    </nav>
 
-        <div class="glass p-6 rounded-3xl text-center shadow-xl">
-            <p class="text-xs uppercase tracking-widest text-slate-400">Discipline Points</p>
-            <div id="score" class="text-6xl font-black text-white my-2">100</div>
-            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                <div id="scoreBar" class="bg-emerald-500 h-full transition-all duration-500" style="width: 100%"></div>
-            </div>
-        </div>
-
-        <div class="glass p-6 rounded-3xl space-y-4">
-            <input id="item" type="text" placeholder="What did you buy?" class="w-full bg-slate-800 border-none rounded-xl p-3 text-white focus:ring-2 focus:ring-emerald-500 outline-none">
-            <input id="amount" type="number" placeholder="Amount ($)" class="w-full bg-slate-800 border-none rounded-xl p-3 text-white focus:ring-2 focus:ring-emerald-500 outline-none">
-            
-            <div class="flex gap-2">
-                <button onclick="addExpense(true)" class="flex-1 bg-emerald-600 hover:bg-emerald-500 py-3 rounded-xl font-bold transition">Need</button>
-                <button onclick="addExpense(false)" class="flex-1 bg-rose-600 hover:bg-rose-500 py-3 rounded-xl font-bold transition">Want</button>
-            </div>
-        </div>
-
-        <div class="space-y-3">
-            <h2 class="text-lg font-semibold px-2 text-slate-300">Recent Spending</h2>
-            <div id="history" class="space-y-2">
+    <div class="max-w-md mx-auto p-5 space-y-10">
+        
+        <section class="text-center py-10">
+            <div class="relative inline-block">
+                <svg class="w-40 h-40 transform -rotate-90">
+                    <circle cx="80" cy="80" r="70" stroke="currentColor" stroke-width="8" fill="transparent" class="text-slate-800" />
+                    <circle id="progress-circle" cx="80" cy="80" r="70" stroke="currentColor" stroke-width="8" fill="transparent" 
+                        stroke-dasharray="440" stroke-dashoffset="0" class="text-emerald-500 transition-all duration-1000" />
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                    <span id="score-text" class="text-5xl font-extrabold text-white">100</span>
+                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Points</span>
                 </div>
-        </div>
+            </div>
+            <p id="insight-text" class="mt-4 text-emerald-400 text-sm italic italic">"Your subconscious is your bank; deposit discipline."</p>
+        </section>
+
+        <section>
+            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 px-2">Daily Metrics</h3>
+            <div class="flex gap-4 overflow-x-auto pb-4 no-scrollbar scroll-section">
+                <div class="snap-item min-w-[140px] glass-card p-4 rounded-3xl">
+                    <p class="text-[10px] text-slate-500 font-bold uppercase">Total</p>
+                    <p id="total-val" class="text-xl font-bold">$0</p>
+                </div>
+                <div class="snap-item min-w-[140px] glass-card p-4 rounded-3xl">
+                    <p class="text-[10px] text-slate-500 font-bold uppercase">Needs</p>
+                    <p id="needs-val" class="text-xl font-bold text-emerald-400">$0</p>
+                </div>
+                <div class="snap-item min-w-[140px] glass-card p-4 rounded-3xl">
+                    <p class="text-[10px] text-slate-500 font-bold uppercase">Wants</p>
+                    <p id="wants-val" class="text-xl font-bold text-rose-400">$0</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card p-6 rounded-[2.5rem] space-y-4 shadow-2xl">
+            <input id="item" type="text" placeholder="Entry Name" class="w-full bg-slate-900 border-none rounded-2xl p-4 text-white placeholder:text-slate-600 focus:ring-1 focus:ring-emerald-500 outline-none">
+            <input id="amount" type="number" placeholder="Price ($)" class="w-full bg-slate-900 border-none rounded-2xl p-4 text-white placeholder:text-slate-600 focus:ring-1 focus:ring-emerald-500 outline-none">
+            <div class="flex gap-3">
+                <button onclick="addEntry(true)" class="flex-1 bg-white text-black py-4 rounded-2xl font-bold text-xs uppercase tracking-widest active:scale-95 transition">Essential</button>
+                <button onclick="addEntry(false)" class="flex-1 bg-emerald-600 text-white py-4 rounded-2xl font-bold text-xs uppercase tracking-widest active:scale-95 transition">Impulse</button>
+            </div>
+        </section>
+
+        <section class="space-y-4">
+            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest px-2">Live Timeline</h3>
+            <div id="history-feed" class="space-y-3">
+                </div>
+        </section>
+
+        <section class="pt-10 border-t border-slate-800">
+            <h3 class="text-center text-sm font-bold text-emerald-500 uppercase tracking-[0.3em] mb-8">The Physics of Wealth</h3>
+            
+            <div class="space-y-6">
+                <div class="glass-card p-6 rounded-3xl">
+                    <h4 class="font-bold text-white mb-2">Entropy & Expenses</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Money, like energy in a closed system, tends toward entropy (disorder). Discipline is the external work required to maintain financial order.</p>
+                </div>
+                
+                <div class="glass-card p-6 rounded-3xl">
+                    <h4 class="font-bold text-white mb-2">The Subconscious Hook</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">Impulse buys are often the subconscious mind seeking a dopamine spike to compensate for stress. Log your 'Wants' to make the invisible visible.</p>
+                </div>
+
+                <div class="bg-gradient-to-br from-emerald-900/40 to-slate-900 p-6 rounded-3xl border border-emerald-500/20">
+                    <h4 class="font-bold text-emerald-400 mb-2 underline">Daily Mission</h4>
+                    <p class="text-sm font-semibold text-white">Don't log a single 'Want' for the next 4 hours to earn +10 Discipline Points.</p>
+                </div>
+            </div>
+        </section>
+
     </div>
 
     <script>
         let score = 100;
-        const historyDiv = document.getElementById('history');
-        const scoreDisplay = document.getElementById('score');
-        const scoreBar = document.getElementById('scoreBar');
+        let logs = [];
 
-        function addExpense(isNeed) {
+        function updateDisplay() {
+            // Circle Progress
+            const circle = document.getElementById('progress-circle');
+            const offset = 440 - (score / 100) * 440;
+            circle.style.strokeDashoffset = offset;
+            
+            document.getElementById('score-text').innerText = score;
+            document.getElementById('grade-badge').innerText = `SCORE: ${score}`;
+
+            // History Rendering
+            const feed = document.getElementById('history-feed');
+            feed.innerHTML = '';
+            let total = 0, nTotal = 0, wTotal = 0;
+
+            logs.forEach(log => {
+                total += parseFloat(log.amount);
+                if(log.isNeed) nTotal += parseFloat(log.amount);
+                else wTotal += parseFloat(log.amount);
+
+                const div = document.createElement('div');
+                div.className = "glass-card p-4 rounded-2xl flex justify-between items-center";
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-2 h-2 rounded-full ${log.isNeed ? 'bg-emerald-500' : 'bg-rose-500'}"></div>
+                        <div><p class="text-sm font-bold">${log.item}</p><p class="text-[10px] text-slate-500">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p></div>
+                    </div>
+                    <span class="font-black">$${log.amount}</span>
+                `;
+                feed.prepend(div);
+            });
+
+            document.getElementById('total-val').innerText = `$${total}`;
+            document.getElementById('needs-val').innerText = `$${nTotal}`;
+            document.getElementById('wants-val').innerText = `$${wTotal}`;
+        }
+
+        function addEntry(isNeed) {
             const item = document.getElementById('item').value;
             const amount = document.getElementById('amount').value;
+            if(!item || !amount) return;
 
-            if (!item || !amount) return alert("Fill in the details!");
+            if(isNeed) score = Math.min(100, score + 2);
+            else score = Math.max(0, score - Math.floor(amount/5));
 
-            // Discipline Logic: Lose points for "Wants", maintain for "Needs"
-            if (!isNeed) {
-                score -= Math.floor(amount / 5);
-                if (score < 0) score = 0;
-            } else {
-                score += 2; // Small bonus for being responsible
-                if (score > 100) score = 100;
-            }
-
-            updateUI(item, amount, isNeed);
-            
-            // Clear inputs
+            logs.push({item, amount, isNeed});
             document.getElementById('item').value = '';
             document.getElementById('amount').value = '';
+            updateDisplay();
         }
 
-        function updateUI(item, amount, isNeed) {
-            scoreDisplay.innerText = score;
-            scoreBar.style.width = score + "%";
-            
-            // Color logic for bar
-            if (score < 40) scoreBar.className = "bg-rose-500 h-full transition-all duration-500";
-            else if (score < 70) scoreBar.className = "bg-amber-500 h-full transition-all duration-500";
-            else scoreBar.className = "bg-emerald-500 h-full transition-all duration-500";
-
-            // Add to history list
-            const entry = document.createElement('div');
-            entry.className = "glass p-4 rounded-2xl flex justify-between items-center animate-fade-in";
-            entry.innerHTML = `
-                <div>
-                    <p class="font-medium">${item}</p>
-                    <p class="text-xs ${isNeed ? 'text-emerald-400' : 'text-rose-400'}">${isNeed ? 'Essential' : 'Luxury / Want'}</p>
-                </div>
-                <span class="font-bold text-lg">$${amount}</span>
-            `;
-            historyDiv.prepend(entry);
-        }
+        updateDisplay();
     </script>
 </body>
 </html>
