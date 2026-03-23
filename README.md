@@ -30,4 +30,4 @@ Since this is a single-file application, you can run it directly on your phone:
 3. "Add to Home Screen" for a native app-like experience.
 
 ---
-*Created with focus and discipline.*
+*Created with focus and discipline.* link :`https://kbbrian-dev.github.io/The-financial-discipline-/`
