@@ -3,183 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenSpend | Evolutionary Zenith</title>
+    <title>ZenSpend | Infinite Architecture</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --neon: #00f2fe; --royal: #7c3aed; --bg: #030014; }
-        body { 
-            background: var(--bg); color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif;
-            transition: background 1s ease; overflow-x: hidden;
-        }
-        .neo-glass { 
-            background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(30px); 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-        }
-        .evolution-glow { box-shadow: 0 0 50px rgba(0, 242, 254, 0.2); border-color: var(--neon) !important; }
+        :root { --p: #00f2fe; --s: #7c3aed; --dark: #020617; }
+        body { background: var(--dark); color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
         
-        /* Smooth Scroll & Animations */
-        .reveal { opacity: 0; transform: translateY(20px); transition: 0.8s all ease; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        
-        @keyframes orbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .orbit-ring { animation: orbit 10s linear infinite; opacity: 0.3; }
+        /* 1. UNIQUE GEOMETRY SHAPES */
+        .shape-hex { clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); background: rgba(255,255,255,0.05); transition: 0.3s; }
+        .shape-slant { clip-path: polygon(0 10%, 100% 0, 100% 90%, 0 100%); background: linear-gradient(45deg, rgba(124,58,237,0.1), transparent); }
+        .shape-blob { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; background: rgba(0,242,254,0.05); }
 
-        /* Modal Styling */
-        #insightModal { 
-            display: none; position: fixed; inset: 0; z-index: 100;
-            background: rgba(3, 0, 20, 0.95); align-items: center; justify-content: center; p: 4;
-        }
+        /* 2. PARALLAX & ANIMATION */
+        .parallax-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%); }
+        .floating-orb { position: absolute; width: 300px; height: 300px; background: var(--s); filter: blur(150px); opacity: 0.2; animation: move 20s infinite alternate; }
+        @keyframes move { from { transform: translate(-10%, -10%); } to { transform: translate(100%, 80%); } }
+
+        .reveal { opacity: 0; transform: translateY(50px); transition: 1s all ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); }
     </style>
 </head>
-<body class="p-4 lg:p-10">
+<body class="p-0">
 
-    <div id="insightModal" class="p-6">
-        <div class="neo-glass max-w-lg p-10 rounded-[3rem] text-center border-t-4 border-cyan-400">
-            <div class="text-4xl mb-4">🧬</div>
-            <h2 class="text-2xl font-800 mb-4 tracking-tighter uppercase">Subconscious Breakthrough</h2>
-            <p id="insightContent" class="text-slate-400 text-sm leading-relaxed mb-8 italic"></p>
-            <button onclick="closeModal()" class="bg-white text-black px-8 py-3 rounded-full font-800 text-xs uppercase tracking-widest">Acknowledge</button>
-        </div>
-    </div>
+    <div class="parallax-bg"><div class="floating-orb"></div></div>
 
-    <div class="max-w-7xl mx-auto space-y-8">
-        <nav class="flex justify-between items-center neo-glass p-6 rounded-[2rem] sticky top-4 z-50">
-            <h1 class="text-2xl font-800 tracking-tighter italic">ZEN<span class="text-cyan-400">SPEND</span></h1>
-            <div class="flex items-center gap-4">
-                <div class="text-right hidden md:block">
-                    <p class="text-[9px] text-slate-500 font-black uppercase">Biology Mode</p>
-                    <p class="text-xs text-cyan-400 font-bold" id="bioMode">ADAPTIVE</p>
+    <nav class="sticky top-0 z-50 glass px-10 py-6 flex justify-between items-center">
+        <h1 class="text-2xl font-800 tracking-tighter">ZEN<span class="text-cyan-400">SPEND</span></h1>
+        <div id="score-pill" class="px-4 py-1 rounded-full border border-cyan-400 text-cyan-400 text-xs font-bold">100 PTS</div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto py-20 px-6 space-y-40">
+
+        <section class="text-center reveal">
+            <div class="w-64 h-64 mx-auto rounded-full border-2 border-dashed border-cyan-500/30 p-4 flex items-center justify-center relative">
+                <div class="absolute inset-0 animate-spin-slow opacity-20 border-t-2 border-cyan-400 rounded-full"></div>
+                <div>
+                    <h2 class="text-7xl font-800" id="mainScore">100</h2>
+                    <p class="text-[10px] uppercase font-black text-slate-500 tracking-[0.3em]">Frequency</p>
                 </div>
-                <button onclick="exportData()" class="p-2 bg-white/5 rounded-xl hover:bg-white/10">📊</button>
             </div>
-        </nav>
+            <p class="mt-10 text-slate-400 italic">"Wealth is the concentration of vital energy."</p>
+        </section>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div class="lg:col-span-8 space-y-8">
-                
-                <section class="neo-glass p-12 rounded-[3.5rem] relative overflow-hidden group">
-                    <div class="absolute -right-20 -top-20 w-80 h-80 bg-cyan-500/10 rounded-full blur-[100px]"></div>
-                    <div class="flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
-                        <div class="relative w-48 h-48 flex items-center justify-center">
-                            <div class="absolute inset-0 border-2 border-dashed border-cyan-400/30 rounded-full orbit-ring"></div>
-                            <div class="text-center">
-                                <span class="text-7xl font-800 text-white" id="mainScore">100</span>
-                                <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest">Resonance</p>
-                            </div>
-                        </div>
-                        <div class="flex-1 text-center md:text-left">
-                            <h2 class="text-sm font-black text-cyan-400 tracking-[0.4em] uppercase mb-2">Evolutionary Status</h2>
-                            <p class="text-slate-400 text-sm leading-relaxed" id="statusMsg">Your prefrontal cortex is overriding primitive spending urges. You are currently in a high-discipline state.</p>
-                            <div class="mt-6 h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                                <div id="pBar" class="h-full bg-gradient-to-r from-purple-600 to-cyan-400 transition-all duration-1000" style="width: 100%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="neo-glass p-10 rounded-[3rem] reveal">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <input id="item" type="text" placeholder="Entry Label" class="bg-white/5 p-5 rounded-2xl outline-none focus:ring-1 focus:ring-cyan-500">
-                        <input id="amount" type="number" placeholder="Cost ($)" class="bg-white/5 p-5 rounded-2xl outline-none focus:ring-1 focus:ring-cyan-500">
-                    </div>
-                    <div class="flex gap-4">
-                        <button onclick="addEntry(true)" class="flex-1 bg-white text-black py-5 rounded-2xl font-800 text-xs uppercase tracking-widest active:scale-95 transition">Essential</button>
-                        <button onclick="addEntry(false)" class="flex-1 bg-gradient-to-r from-purple-600 to-cyan-500 text-white py-5 rounded-2xl font-800 text-xs uppercase tracking-widest active:scale-95 transition">Impulse</button>
-                    </div>
-                </section>
-
-                <div id="feed" class="space-y-4"></div>
-            </div>
-
-            <aside class="lg:col-span-4 space-y-8">
-                <div class="neo-glass p-8 rounded-[2.5rem] reveal">
-                    <h4 class="text-[10px] font-black text-slate-500 uppercase mb-4 tracking-widest">Energy Metrics</h4>
-                    <div class="space-y-4">
-                        <div class="flex justify-between"><span class="text-xs">Leakage</span><span id="leak" class="text-rose-400 font-bold">$0.00</span></div>
-                        <div class="flex justify-between"><span class="text-xs">Waste %</span><span id="waste" class="text-cyan-400 font-bold">0%</span></div>
-                    </div>
-                </section>
-
-                <div class="neo-glass p-8 rounded-[2.5rem] reveal border-l-4 border-cyan-400">
-                    <h4 class="text-[10px] font-black text-slate-500 uppercase mb-4 tracking-widest">Subconscious Journal</h4>
-                    <textarea id="journal" oninput="saveJournal()" class="w-full bg-transparent text-xs h-32 outline-none placeholder:text-slate-700 resize-none" placeholder="What triggered your last purchase? Fatigue? Joy? Habit?"></textarea>
+        <section class="shape-slant p-20 reveal">
+            <div class="max-w-2xl mx-auto space-y-6">
+                <h3 class="text-xl font-800 uppercase tracking-tighter mb-4">Capture Flux</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input id="item" type="text" placeholder="Entry Name" class="bg-black/40 p-5 rounded-xl outline-none border border-white/10 focus:border-cyan-400">
+                    <input id="amount" type="number" placeholder="Value ($)" class="bg-black/40 p-5 rounded-xl outline-none border border-white/10 focus:border-cyan-400">
                 </div>
-            </aside>
-        </div>
-    </div>
+                <div class="flex gap-4">
+                    <button onclick="addEntry(true)" class="flex-1 bg-white text-black py-4 rounded-xl font-800 text-xs uppercase hover:bg-cyan-400 transition">Logic</button>
+                    <button onclick="addEntry(false)" class="flex-1 bg-purple-600 text-white py-4 rounded-xl font-800 text-xs uppercase hover:bg-purple-500 transition">Emotion</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h3 class="text-center text-xs font-black uppercase tracking-[0.5em] text-slate-500 mb-10">Neural Clusters</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="shape-hex p-12 flex flex-col items-center hover:bg-cyan-500/10 cursor-pointer">
+                    <span class="text-2xl mb-2">💻</span>
+                    <p class="text-xs font-bold">TECH</p>
+                    <p id="cat-tech" class="text-lg font-800 text-cyan-400">$0</p>
+                </div>
+                <div class="shape-hex p-12 flex flex-col items-center hover:bg-purple-500/10 cursor-pointer">
+                    <span class="text-2xl mb-2">🥗</span>
+                    <p class="text-xs font-bold">BIO</p>
+                    <p id="cat-bio" class="text-lg font-800 text-purple-400">$0</p>
+                </div>
+                <div class="shape-hex p-12 flex flex-col items-center hover:bg-amber-500/10 cursor-pointer">
+                    <span class="text-2xl mb-2">🌌</span>
+                    <p class="text-xs font-bold">VOID</p>
+                    <p id="cat-void" class="text-lg font-800 text-amber-400">$0</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="space-y-6 reveal">
+             <h3 class="text-xs font-black uppercase tracking-[0.5em] text-slate-500">Timeline</h3>
+             <div id="feed" class="space-y-8">
+                 </div>
+        </section>
+
+        <section class="shape-blob p-16 reveal border border-white/5">
+            <h3 class="text-2xl font-800 mb-6">Subconscious Archive</h3>
+            <textarea id="journal" class="w-full bg-transparent border-b border-white/10 h-40 outline-none text-slate-400 italic text-sm leading-relaxed" placeholder="Describe the feeling of your last urge to spend..."></textarea>
+            <div class="mt-4 flex justify-between items-center">
+                <p class="text-[9px] text-slate-600 uppercase font-bold">Last backup: Just now</p>
+                <button onclick="saveJournal()" class="text-cyan-400 text-[10px] font-black uppercase hover:underline">Commit to Memory</button>
+            </div>
+        </section>
+
+        <section class="max-w-xl mx-auto text-center reveal space-y-10">
+            <h3 class="text-xs font-black text-cyan-400 uppercase tracking-widest">The Physics of Discipline</h3>
+            <p class="text-slate-400 leading-loose text-sm">
+                In a closed financial system, entropy (waste) increases naturally. To reverse entropy, one must perform <strong>work</strong>. In this context, work is the act of conscious rejection. Every time you deny a 'Want', you are performing a quantum shift in your future reality...
+            </p>
+            <div class="h-20 w-px bg-gradient-to-b from-cyan-500 to-transparent mx-auto"></div>
+            <p class="text-slate-400 leading-loose text-sm italic">
+                You are not just saving money. You are accumulating <strong>intent</strong>.
+            </p>
+        </section>
+
+    </main>
+
+    <footer class="p-20 text-center glass border-t border-white/5 mt-40">
+        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">ZenSpend Infinity Engine • v4.0</p>
+    </footer>
 
     <script>
-        let score = parseInt(localStorage.getItem('zenScore')) || 100;
-        let logs = JSON.parse(localStorage.getItem('zenLogs')) || [];
-        const insights = [
-            "Neuroplasticity: By delaying a purchase for 24 hours, you weaken the neural pathways of impulse and strengthen the prefrontal cortex.",
-            "Evolutionary Biology: Your ancestors hunted for survival. Today, 'shopping' triggers the same dopamine loop as hunting, but without the survival benefit.",
-            "Entropy Law: Without active discipline, your finances move toward disorder. Discipline is the 'work' required to maintain order.",
-            "The Subconscious Hook: 95% of spending decisions are made by the subconscious. Bringing them into this app makes the invisible, visible."
-        ];
+        let score = 100;
+        let logs = [];
 
         function updateUI() {
             document.getElementById('mainScore').innerText = score;
-            document.getElementById('pBar').style.width = score + "%";
+            document.getElementById('score-pill').innerText = `${score} PTS`;
             
             const feed = document.getElementById('feed');
             feed.innerHTML = '';
-            let total = 0, wants = 0;
+            
+            let tech = 0, bio = 0, voidVal = 0;
 
             logs.forEach(log => {
-                total += parseFloat(log.amount);
-                if(!log.isNeed) wants += parseFloat(log.amount);
-
-                const card = document.createElement('div');
-                card.className = "neo-glass p-6 rounded-3xl flex justify-between items-center reveal active border-l-4 " + (log.isNeed ? 'border-emerald-500' : 'border-rose-500');
-                card.innerHTML = `
-                    <div><p class="font-800 text-sm">${log.item}</p><p class="text-[9px] text-slate-500 uppercase">${log.isNeed ? 'Asset' : 'Entropy'}</p></div>
-                    <p class="text-xl font-800">$${log.amount}</p>
+                const div = document.createElement('div');
+                div.className = `p-8 glass rounded-[2rem] flex justify-between items-center reveal active transition-all hover:scale-[1.02] border-l-8 ${log.isNeed ? 'border-cyan-500' : 'border-purple-600'}`;
+                div.innerHTML = `
+                    <div>
+                        <p class="font-800 text-lg">${log.item}</p>
+                        <p class="text-[10px] text-slate-500 uppercase font-bold">${log.isNeed ? 'Logical Energy' : 'Emotional Sink'}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-2xl font-800">$${log.amount}</p>
+                    </div>
                 `;
-                feed.prepend(card);
+                feed.prepend(div);
+                
+                // Demo category splitting
+                if(log.amount > 50) tech += parseFloat(log.amount);
+                else if(log.isNeed) bio += parseFloat(log.amount);
+                else voidVal += parseFloat(log.amount);
             });
 
-            document.getElementById('leak').innerText = `$${wants.toFixed(2)}`;
-            document.getElementById('waste').innerText = total > 0 ? ((wants/total)*100).toFixed(0) + "%" : "0%";
-            
-            if(score >= 100) triggerInsight();
+            document.getElementById('cat-tech').innerText = `$${tech}`;
+            document.getElementById('cat-bio').innerText = `$${bio}`;
+            document.getElementById('cat-void').innerText = `$${voidVal}`;
 
-            localStorage.setItem('zenScore', score);
-            localStorage.setItem('zenLogs', JSON.stringify(logs));
-            applyReveal();
+            initScrollReveal();
         }
 
         function addEntry(isNeed) {
             const item = document.getElementById('item').value;
             const amount = document.getElementById('amount').value;
             if(!item || !amount) return;
-            isNeed ? score = Math.min(100, score + 5) : score = Math.max(0, score - Math.floor(amount/2));
+            
+            isNeed ? score = Math.min(100, score + 4) : score = Math.max(0, score - Math.floor(amount/5));
             logs.push({item, amount, isNeed});
             document.getElementById('item').value = ''; document.getElementById('amount').value = '';
             updateUI();
         }
 
-        function triggerInsight() {
-            const randomInsight = insights[Math.floor(Math.random() * insights.length)];
-            document.getElementById('insightContent').innerText = randomInsight;
-            document.getElementById('insightModal').style.display = 'flex';
-        }
-
-        function closeModal() { document.getElementById('insightModal').style.display = 'none'; }
-        function saveJournal() { localStorage.setItem('zenJournal', document.getElementById('journal').value); }
-        function applyReveal() {
-            const obs = new IntersectionObserver((e) => { e.forEach(x => { if(x.isIntersecting) x.target.classList.add('active'); }); });
-            document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
-        }
-        function exportData() {
-            let csv = "data:text/csv;charset=utf-8,Item,Amount,Type\n" + logs.map(e => `${e.item},${e.amount},${e.isNeed?'Need':'Want'}`).join("\n");
-            window.open(encodeURI(csv));
+        function initScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
 
         window.onload = () => {
-            document.getElementById('journal').value = localStorage.getItem('zenJournal') || '';
             updateUI();
+            initScrollReveal();
         };
     </script>
 </body>
