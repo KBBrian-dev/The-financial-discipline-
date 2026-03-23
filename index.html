@@ -3,212 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenSpend | Elite Discipline</title>
+    <title>ZenSpend | Evolutionary Zenith</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-deep: #0f0a1e;
-            --accent-purple: #7c3aed;
-            --accent-blue: #3b82f6;
-        }
+        :root { --neon: #00f2fe; --royal: #7c3aed; --bg: #030014; }
         body { 
-            background: radial-gradient(circle at top right, #1e1b4b, #0f0a1e, #000000); 
-            color: #e2e8f0; 
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            min-height: 200vh; /* Ensures plenty of scroll space */
+            background: var(--bg); color: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background 1s ease; overflow-x: hidden;
         }
-        .glass { 
-            background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(15px); 
+        .neo-glass { 
+            background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(30px); 
             border: 1px solid rgba(255, 255, 255, 0.08); 
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .glass:hover { transform: translateY(-5px); border-color: rgba(124, 58, 237, 0.5); }
+        .evolution-glow { box-shadow: 0 0 50px rgba(0, 242, 254, 0.2); border-color: var(--neon) !important; }
         
-        /* Animation: Scroll Reveal */
-        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s ease-out; }
+        /* Smooth Scroll & Animations */
+        .reveal { opacity: 0; transform: translateY(20px); transition: 0.8s all ease; }
         .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        @keyframes orbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .orbit-ring { animation: orbit 10s linear infinite; opacity: 0.3; }
 
-        /* Background Glow Follower (Desktop Feature) */
-        #glow {
-            position: fixed; width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%);
-            border-radius: 50%; pointer-events: none; z-index: -1;
-        }
-
-        .gradient-text {
-            background: linear-gradient(135deg, #a78bfa 0%, #60a5fa 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        /* Modal Styling */
+        #insightModal { 
+            display: none; position: fixed; inset: 0; z-index: 100;
+            background: rgba(3, 0, 20, 0.95); align-items: center; justify-content: center; p: 4;
         }
     </style>
 </head>
-<body>
+<body class="p-4 lg:p-10">
 
-    <div id="glow"></div>
-
-    <nav class="sticky top-0 z-50 glass m-4 rounded-2xl px-6 py-4 flex justify-between items-center max-w-6xl mx-auto">
-        <h1 class="font-800 text-xl tracking-tighter gradient-text uppercase">ZenSpend <span class="text-white opacity-50 text-xs">v3.0</span></h1>
-        <div class="flex gap-6 text-[10px] font-bold uppercase tracking-widest hidden md:flex">
-            <a href="#" class="hover:text-purple-400">Dashboard</a>
-            <a href="#" class="hover:text-purple-400">Insights</a>
-            <a href="#" class="hover:text-purple-400">Philosophy</a>
+    <div id="insightModal" class="p-6">
+        <div class="neo-glass max-w-lg p-10 rounded-[3rem] text-center border-t-4 border-cyan-400">
+            <div class="text-4xl mb-4">🧬</div>
+            <h2 class="text-2xl font-800 mb-4 tracking-tighter uppercase">Subconscious Breakthrough</h2>
+            <p id="insightContent" class="text-slate-400 text-sm leading-relaxed mb-8 italic"></p>
+            <button onclick="closeModal()" class="bg-white text-black px-8 py-3 rounded-full font-800 text-xs uppercase tracking-widest">Acknowledge</button>
         </div>
-        <div id="score-pill" class="bg-purple-500/20 text-purple-300 px-4 py-1 rounded-full text-xs font-bold border border-purple-500/30">100 Pts</div>
-    </nav>
+    </div>
 
-    <main class="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 py-10">
-        
-        <div class="lg:col-span-7 space-y-10">
-            
-            <section class="reveal text-center lg:text-left">
-                <h2 class="text-5xl lg:text-7xl font-800 tracking-tighter mb-4">Financial <br><span class="gradient-text">Consciousness.</span></h2>
-                <p class="text-slate-400 max-w-md">Align your subconscious spending with your universal goals. Every transaction is an exchange of energy.</p>
-            </section>
-
-            <section class="glass p-8 rounded-[2.5rem] reveal">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <input id="item" type="text" placeholder="Transaction Name" class="bg-white/5 border-none rounded-2xl p-4 outline-none focus:ring-2 focus:ring-purple-500 text-white">
-                    <input id="amount" type="number" placeholder="Value ($)" class="bg-white/5 border-none rounded-2xl p-4 outline-none focus:ring-2 focus:ring-blue-500 text-white">
+    <div class="max-w-7xl mx-auto space-y-8">
+        <nav class="flex justify-between items-center neo-glass p-6 rounded-[2rem] sticky top-4 z-50">
+            <h1 class="text-2xl font-800 tracking-tighter italic">ZEN<span class="text-cyan-400">SPEND</span></h1>
+            <div class="flex items-center gap-4">
+                <div class="text-right hidden md:block">
+                    <p class="text-[9px] text-slate-500 font-black uppercase">Biology Mode</p>
+                    <p class="text-xs text-cyan-400 font-bold" id="bioMode">ADAPTIVE</p>
                 </div>
-                <div class="flex gap-4">
-                    <button onclick="addLog(true)" class="flex-1 bg-white text-black py-4 rounded-2xl font-800 uppercase tracking-widest text-xs hover:bg-slate-200 transition">Logic (Need)</button>
-                    <button onclick="addLog(false)" class="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 rounded-2xl font-800 uppercase tracking-widest text-xs hover:opacity-90 transition">Emotion (Want)</button>
-                </div>
-            </section>
-
-            <section class="space-y-4 reveal">
-                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest px-2">Live Energy Stream</h3>
-                <div id="feed" class="space-y-4">
-                    </div>
-            </section>
-        </div>
-
-        <aside class="lg:col-span-5 space-y-10 lg:sticky lg:top-28 self-start">
-            
-            <div class="glass p-8 rounded-[2.5rem] bg-gradient-to-br from-purple-500/5 to-blue-500/5 reveal">
-                <div class="flex justify-between items-end mb-6">
-                    <div>
-                        <p class="text-[10px] font-bold text-slate-500 uppercase">Total Leakage</p>
-                        <h4 id="total-val" class="text-4xl font-800 text-white">$0.00</h4>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-[10px] font-bold text-slate-500 uppercase">Discipline Grade</p>
-                        <h4 id="grade" class="text-4xl font-800 text-emerald-400">A+</h4>
-                    </div>
-                </div>
-                <div class="w-full bg-white/5 h-2 rounded-full overflow-hidden">
-                    <div id="bar" class="bg-gradient-to-r from-purple-500 to-blue-500 h-full w-full transition-all duration-1000"></div>
-                </div>
+                <button onclick="exportData()" class="p-2 bg-white/5 rounded-xl hover:bg-white/10">📊</button>
             </div>
+        </nav>
 
-            <div class="glass p-8 rounded-[2.5rem] reveal">
-                <h4 class="text-sm font-bold uppercase tracking-widest mb-4">Milestones</h4>
-                <div class="space-y-4">
-                    <div class="flex items-center gap-4 opacity-50" id="m1">
-                        <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-xs">🛡️</div>
-                        <p class="text-xs font-semibold">The Guardian (3 Needs in a row)</p>
-                    </div>
-                    <div class="flex items-center gap-4 opacity-50" id="m2">
-                        <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-xs">🌀</div>
-                        <p class="text-xs font-semibold">Zen Master (Score > 90 for 5 entries)</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="reveal space-y-6">
-                <div class="glass p-6 rounded-3xl border-l-4 border-l-purple-500">
-                    <h5 class="font-800 text-sm mb-2">Universal Energy Law</h5>
-                    <p class="text-xs text-slate-400 leading-relaxed">Wealth is not just money; it is concentrated focus. When you spend impulsively, you scatter your energy across the universe, weakening your own gravity.</p>
-                </div>
-            </div>
-        </aside>
-    </main>
-
-    <script>
-        let score = 100;
-        let logs = [];
-        let needsStreak = 0;
-
-        // Desktop Glow Follower
-        const glow = document.getElementById('glow');
-        window.addEventListener('mousemove', (e) => {
-            glow.style.left = (e.clientX - 200) + 'px';
-            glow.style.top = (e.clientY - 200) + 'px';
-        });
-
-        // Scroll Reveal Logic
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
-        }, { threshold: 0.1 });
-
-        function init() {
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-            updateUI();
-        }
-
-        function addLog(isNeed) {
-            const item = document.getElementById('item').value;
-            const amount = parseFloat(document.getElementById('amount').value);
-            if(!item || isNaN(amount)) return;
-
-            if(isNeed) {
-                score = Math.min(100, score + 4);
-                needsStreak++;
-            } else {
-                score = Math.max(0, score - Math.floor(amount/3));
-                needsStreak = 0;
-            }
-
-            logs.push({item, amount, isNeed, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})});
-            document.getElementById('item').value = '';
-            document.getElementById('amount').value = '';
-            updateUI();
-        }
-
-        function updateUI() {
-            document.getElementById('score-pill').innerText = `${score} Pts`;
-            document.getElementById('bar').style.width = score + "%";
-            
-            // Update Grade
-            const gradeEl = document.getElementById('grade');
-            if(score > 90) gradeEl.innerText = "A+";
-            else if(score > 70) gradeEl.innerText = "B";
-            else gradeEl.innerText = "D";
-
-            // Milestone Checks
-            if(needsStreak >= 3) document.getElementById('m1').classList.remove('opacity-50');
-            if(score >= 90 && logs.length >= 5) document.getElementById('m2').classList.remove('opacity-50');
-
-            const feed = document.getElementById('feed');
-            feed.innerHTML = '';
-            let total = 0;
-
-            logs.forEach(log => {
-                total += log.amount;
-                const card = document.createElement('div');
-                card.className = "glass p-6 rounded-3xl flex justify-between items-center border-r-4 " + (log.isNeed ? 'border-r-blue-500' : 'border-r-purple-500');
-                card.innerHTML = `
-                    <div class="flex items-center gap-4">
-                        <div class="p-3 bg-white/5 rounded-2xl text-xl">${log.isNeed ? '💎' : '🔥'}</div>
-                        <div>
-                            <p class="font-800 text-sm tracking-tight">${log.item}</p>
-                            <p class="text-[9px] font-bold text-slate-500 uppercase">${log.isNeed ? 'Productive Asset' : 'Energy Leak'}</p>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-8 space-y-8">
+                
+                <section class="neo-glass p-12 rounded-[3.5rem] relative overflow-hidden group">
+                    <div class="absolute -right-20 -top-20 w-80 h-80 bg-cyan-500/10 rounded-full blur-[100px]"></div>
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
+                        <div class="relative w-48 h-48 flex items-center justify-center">
+                            <div class="absolute inset-0 border-2 border-dashed border-cyan-400/30 rounded-full orbit-ring"></div>
+                            <div class="text-center">
+                                <span class="text-7xl font-800 text-white" id="mainScore">100</span>
+                                <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest">Resonance</p>
+                            </div>
+                        </div>
+                        <div class="flex-1 text-center md:text-left">
+                            <h2 class="text-sm font-black text-cyan-400 tracking-[0.4em] uppercase mb-2">Evolutionary Status</h2>
+                            <p class="text-slate-400 text-sm leading-relaxed" id="statusMsg">Your prefrontal cortex is overriding primitive spending urges. You are currently in a high-discipline state.</p>
+                            <div class="mt-6 h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                                <div id="pBar" class="h-full bg-gradient-to-r from-purple-600 to-cyan-400 transition-all duration-1000" style="width: 100%"></div>
+                            </div>
                         </div>
                     </div>
-                    <div class="text-right">
-                        <p class="text-xl font-800">$${log.amount}</p>
-                        <p class="text-[9px] text-slate-500">${log.time}</p>
+                </section>
+
+                <section class="neo-glass p-10 rounded-[3rem] reveal">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <input id="item" type="text" placeholder="Entry Label" class="bg-white/5 p-5 rounded-2xl outline-none focus:ring-1 focus:ring-cyan-500">
+                        <input id="amount" type="number" placeholder="Cost ($)" class="bg-white/5 p-5 rounded-2xl outline-none focus:ring-1 focus:ring-cyan-500">
                     </div>
+                    <div class="flex gap-4">
+                        <button onclick="addEntry(true)" class="flex-1 bg-white text-black py-5 rounded-2xl font-800 text-xs uppercase tracking-widest active:scale-95 transition">Essential</button>
+                        <button onclick="addEntry(false)" class="flex-1 bg-gradient-to-r from-purple-600 to-cyan-500 text-white py-5 rounded-2xl font-800 text-xs uppercase tracking-widest active:scale-95 transition">Impulse</button>
+                    </div>
+                </section>
+
+                <div id="feed" class="space-y-4"></div>
+            </div>
+
+            <aside class="lg:col-span-4 space-y-8">
+                <div class="neo-glass p-8 rounded-[2.5rem] reveal">
+                    <h4 class="text-[10px] font-black text-slate-500 uppercase mb-4 tracking-widest">Energy Metrics</h4>
+                    <div class="space-y-4">
+                        <div class="flex justify-between"><span class="text-xs">Leakage</span><span id="leak" class="text-rose-400 font-bold">$0.00</span></div>
+                        <div class="flex justify-between"><span class="text-xs">Waste %</span><span id="waste" class="text-cyan-400 font-bold">0%</span></div>
+                    </div>
+                </section>
+
+                <div class="neo-glass p-8 rounded-[2.5rem] reveal border-l-4 border-cyan-400">
+                    <h4 class="text-[10px] font-black text-slate-500 uppercase mb-4 tracking-widest">Subconscious Journal</h4>
+                    <textarea id="journal" oninput="saveJournal()" class="w-full bg-transparent text-xs h-32 outline-none placeholder:text-slate-700 resize-none" placeholder="What triggered your last purchase? Fatigue? Joy? Habit?"></textarea>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        let score = parseInt(localStorage.getItem('zenScore')) || 100;
+        let logs = JSON.parse(localStorage.getItem('zenLogs')) || [];
+        const insights = [
+            "Neuroplasticity: By delaying a purchase for 24 hours, you weaken the neural pathways of impulse and strengthen the prefrontal cortex.",
+            "Evolutionary Biology: Your ancestors hunted for survival. Today, 'shopping' triggers the same dopamine loop as hunting, but without the survival benefit.",
+            "Entropy Law: Without active discipline, your finances move toward disorder. Discipline is the 'work' required to maintain order.",
+            "The Subconscious Hook: 95% of spending decisions are made by the subconscious. Bringing them into this app makes the invisible, visible."
+        ];
+
+        function updateUI() {
+            document.getElementById('mainScore').innerText = score;
+            document.getElementById('pBar').style.width = score + "%";
+            
+            const feed = document.getElementById('feed');
+            feed.innerHTML = '';
+            let total = 0, wants = 0;
+
+            logs.forEach(log => {
+                total += parseFloat(log.amount);
+                if(!log.isNeed) wants += parseFloat(log.amount);
+
+                const card = document.createElement('div');
+                card.className = "neo-glass p-6 rounded-3xl flex justify-between items-center reveal active border-l-4 " + (log.isNeed ? 'border-emerald-500' : 'border-rose-500');
+                card.innerHTML = `
+                    <div><p class="font-800 text-sm">${log.item}</p><p class="text-[9px] text-slate-500 uppercase">${log.isNeed ? 'Asset' : 'Entropy'}</p></div>
+                    <p class="text-xl font-800">$${log.amount}</p>
                 `;
                 feed.prepend(card);
             });
 
-            document.getElementById('total-val').innerText = `$${total.toFixed(2)}`;
-            init(); // Re-apply scroll observer to new elements
+            document.getElementById('leak').innerText = `$${wants.toFixed(2)}`;
+            document.getElementById('waste').innerText = total > 0 ? ((wants/total)*100).toFixed(0) + "%" : "0%";
+            
+            if(score >= 100) triggerInsight();
+
+            localStorage.setItem('zenScore', score);
+            localStorage.setItem('zenLogs', JSON.stringify(logs));
+            applyReveal();
         }
 
-        window.onload = init;
+        function addEntry(isNeed) {
+            const item = document.getElementById('item').value;
+            const amount = document.getElementById('amount').value;
+            if(!item || !amount) return;
+            isNeed ? score = Math.min(100, score + 5) : score = Math.max(0, score - Math.floor(amount/2));
+            logs.push({item, amount, isNeed});
+            document.getElementById('item').value = ''; document.getElementById('amount').value = '';
+            updateUI();
+        }
+
+        function triggerInsight() {
+            const randomInsight = insights[Math.floor(Math.random() * insights.length)];
+            document.getElementById('insightContent').innerText = randomInsight;
+            document.getElementById('insightModal').style.display = 'flex';
+        }
+
+        function closeModal() { document.getElementById('insightModal').style.display = 'none'; }
+        function saveJournal() { localStorage.setItem('zenJournal', document.getElementById('journal').value); }
+        function applyReveal() {
+            const obs = new IntersectionObserver((e) => { e.forEach(x => { if(x.isIntersecting) x.target.classList.add('active'); }); });
+            document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
+        }
+        function exportData() {
+            let csv = "data:text/csv;charset=utf-8,Item,Amount,Type\n" + logs.map(e => `${e.item},${e.amount},${e.isNeed?'Need':'Want'}`).join("\n");
+            window.open(encodeURI(csv));
+        }
+
+        window.onload = () => {
+            document.getElementById('journal').value = localStorage.getItem('zenJournal') || '';
+            updateUI();
+        };
     </script>
 </body>
 </html>
