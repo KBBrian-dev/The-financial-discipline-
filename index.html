@@ -3,115 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenSpend | Daybreak</title>
+    <title>ZenSpend | Zenith Sovereign</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #4f46e5; --logic: #06b6d4; --emotion: #f43f5e; }
+        :root { --logic: #06b6d4; --emotion: #f43f5e; --zenith: #6366f1; }
+        body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; color: #1e293b; background: #f8fafc; overflow-x: hidden; transition: 1.5s background ease; }
         
-        body { 
-            margin: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: linear-gradient(125deg, #f0f9ff 0%, #e0e7ff 50%, #f5f3ff 100%);
-            color: #1e293b;
-            min-height: 100vh;
-        }
-
-        /* 1. ANIMATED MESH GRADIENT BACKGROUND */
+        /* DYNAMIC AURA & NEURAL PULSE */
         .mesh-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            position: fixed; inset: 0; z-index: -1;
             background: 
-                radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(124, 58, 237, 0.1) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.1) 0px, transparent 50%),
-                radial-gradient(at 0% 100%, rgba(79, 70, 229, 0.1) 0px, transparent 50%);
+                radial-gradient(at 0% 0%, var(--aura-1, rgba(6, 182, 212, 0.12)) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, var(--aura-2, rgba(99, 102, 241, 0.08)) 0px, transparent 50%);
         }
+        .neural-pulse { position: fixed; inset: 0; pointer-events: none; border: 20px solid transparent; transition: 2s border ease; }
 
-        /* 2. BRIGHT FROSTED GLASS */
-        .frosted-glass {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.05);
-            transition: all 0.4s ease;
-        }
-        .frosted-glass:hover {
-            background: rgba(255, 255, 255, 0.8);
-            transform: translateY(-2px);
-        }
+        .frosted { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.9); }
+        .shape-prism { clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%); }
+        .shape-hex { clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); }
 
-        /* 3. SHAPES THAT POP */
-        .shape-slant { clip-path: polygon(0 5%, 100% 0, 100% 95%, 0 100%); }
-        .shape-blob { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-
-        .reveal { opacity: 0; transform: translateY(20px); transition: 0.8s all ease; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: 1s all ease; }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        
-        .gradient-text {
-            background: linear-gradient(to right, var(--accent), var(--logic));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+
+        /* MODALS */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.98); z-index: 1000; align-items: center; justify-content: center; flex-direction: column; padding: 2rem; }
     </style>
 </head>
-<body class="p-4 md:p-10">
+<body class="p-4 lg:p-12">
 
-    <div class="mesh-bg"></div>
+    <div class="mesh-bg" id="aura"></div>
+    <div class="neural-pulse" id="pulse"></div>
 
-    <div class="max-w-6xl mx-auto space-y-12">
+    <div id="timerOverlay" class="modal-overlay">
+        <h2 class="text-xs font-black uppercase tracking-[0.4em] mb-4 text-slate-400">Cooling Amygdala Response...</h2>
+        <div id="countdown" class="text-9xl font-800 text-indigo-600">10</div>
+        <p class="mt-8 text-slate-500 italic text-sm text-center">Inhale for 4. Hold for 4. Exhale for 4.<br>Is this a biological necessity or a dopamine loop?</p>
+    </div>
+
+    <div id="resetModal" class="modal-overlay">
+        <h2 class="text-2xl font-800 mb-6 text-slate-900">PREFRONTAL CORTEX VERIFICATION</h2>
+        <p class="text-sm text-slate-500 mb-8">System reset requires logical alignment. Solve this to proceed:</p>
+        <div id="logicQuestion" class="text-lg font-bold mb-6 text-indigo-600"></div>
+        <input id="logicAnswer" type="number" class="bg-slate-100 p-4 rounded-xl mb-6 outline-none focus:ring-2 focus:ring-indigo-400" placeholder="Your Answer">
+        <button onclick="checkLogic()" class="bg-indigo-600 text-white px-10 py-4 rounded-xl font-800 text-xs uppercase tracking-widest">Verify Logic</button>
+        <button onclick="closeReset()" class="mt-4 text-[10px] font-bold text-slate-400 uppercase">Abort Reset</button>
+    </div>
+
+    <div class="max-w-7xl mx-auto space-y-16">
         
-        <nav class="frosted-glass p-6 rounded-[2rem] flex justify-between items-center sticky top-4 z-50">
-            <h1 class="text-2xl font-800 tracking-tighter gradient-text uppercase">ZenSpend</h1>
-            <div class="flex gap-4">
-                <span id="score-val" class="bg-indigo-600 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg shadow-indigo-200">100 PTS</span>
+        <nav class="frosted p-8 rounded-[3rem] flex flex-col md:flex-row justify-between items-center sticky top-6 z-50 shadow-sm">
+            <div class="text-center md:text-left">
+                <h1 class="text-3xl font-800 tracking-tighter uppercase italic">ZenSpend<span class="text-indigo-600">.</span></h1>
+                <p id="rank-name" class="text-[10px] font-black text-indigo-500 tracking-[0.3em] uppercase">Stage: Acolyte</p>
+            </div>
+            <div class="hidden lg:block flex-1 mx-10 overflow-hidden relative h-10">
+                <div id="wisdom-bar" class="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-slate-500 italic uppercase">Syncing Neural Pathways...</div>
+            </div>
+            <div class="flex items-center gap-6">
+                <div id="nav-score" class="w-14 h-14 rounded-full border-2 border-indigo-100 flex items-center justify-center font-800 text-indigo-600 text-xl">100</div>
             </div>
         </nav>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
             
-            <div class="lg:col-span-7 space-y-10">
-                
-                <section class="text-center md:text-left reveal">
-                    <div class="inline-block relative">
-                        <div class="w-40 h-40 rounded-full bg-white flex items-center justify-center shadow-xl border-4 border-indigo-50 relative z-10">
-                            <h2 class="text-6xl font-800 text-slate-800" id="mainScore">100</h2>
+            <div class="lg:col-span-8 space-y-12">
+                <section class="frosted p-12 rounded-[4rem] reveal relative overflow-hidden shadow-sm">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-10">
+                        <div class="text-center md:text-left">
+                            <h2 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Neural Resonance</h2>
+                            <div class="text-9xl font-800 tracking-tighter text-slate-900" id="mainScore">100</div>
+                            <svg class="w-full h-12 mt-4 opacity-40" id="sparkline" viewBox="0 0 200 50">
+                                <path id="flux-path" d="M0 25 L200 25" stroke="#6366f1" stroke-width="2" fill="none" />
+                            </svg>
                         </div>
-                        <div class="absolute -inset-4 bg-indigo-200/30 rounded-full blur-xl animate-pulse"></div>
-                    </div>
-                    <p class="mt-6 text-slate-500 font-medium italic">"Discipline is the bridge between goals and accomplishment."</p>
-                </section>
-
-                <section class="frosted-glass shape-slant p-12 reveal">
-                    <h3 class="text-lg font-800 text-slate-800 mb-6">Capture Energy</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <input id="item" type="text" placeholder="Entry Label" class="bg-white/50 p-4 rounded-xl border-none focus:ring-2 focus:ring-indigo-400 outline-none">
-                        <input id="amount" type="number" placeholder="Value ($)" class="bg-white/50 p-4 rounded-xl border-none focus:ring-2 focus:ring-indigo-400 outline-none">
-                    </div>
-                    <div class="flex gap-4">
-                        <button onclick="addEntry(true)" class="flex-1 bg-slate-900 text-white py-4 rounded-xl font-800 text-xs uppercase hover:bg-slate-800 transition">Logic (Need)</button>
-                        <button onclick="addEntry(false)" class="flex-1 bg-indigo-600 text-white py-4 rounded-xl font-800 text-xs uppercase hover:bg-indigo-500 transition shadow-lg shadow-indigo-200">Emotion (Want)</button>
+                        <div class="w-full md:w-72 space-y-6">
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase">Quantum 10Y Growth</p>
+                                <div id="opp-cost" class="text-5xl font-800 text-indigo-600 tracking-tighter">$0.00</div>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase">Life-Time Expended</p>
+                                <div id="time-leak" class="text-2xl font-800 text-slate-800 tracking-tighter">0.0 hrs</div>
+                                <div class="h-2 w-full bg-slate-100 rounded-full mt-2"><div id="pBar" class="h-full bg-indigo-500 rounded-full transition-all" style="width: 100%"></div></div>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
-                <div id="feed" class="space-y-6">
+                <section class="frosted shape-prism p-16 reveal border-t-[12px] border-indigo-500 shadow-2xl">
+                    <div class="max-w-xl mx-auto space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input id="item" type="text" placeholder="Item Name" class="bg-white/60 p-5 rounded-2xl outline-none focus:ring-2 focus:ring-indigo-400 border-none shadow-inner">
+                            <input id="amount" type="number" placeholder="Value ($)" class="bg-white/60 p-5 rounded-2xl outline-none focus:ring-2 focus:ring-indigo-400 border-none shadow-inner">
+                        </div>
+                        <div class="flex gap-4">
+                            <button onclick="processEntry(true)" class="flex-1 bg-slate-900 text-white p-5 rounded-2xl font-800 text-xs uppercase tracking-widest hover:bg-black transition shadow-xl">Essential Logic</button>
+                            <button onclick="processEntry(false)" class="flex-1 bg-rose-600 text-white p-5 rounded-2xl font-800 text-xs uppercase tracking-widest hover:bg-rose-500 transition shadow-xl shadow-rose-100">Impulse Urge</button>
+                        </div>
                     </div>
+                </section>
+
+                <div id="feed" class="space-y-6"></div>
             </div>
 
-            <aside class="lg:col-span-5 space-y-10">
-                
-                <div class="frosted-glass p-8 rounded-[2.5rem] reveal">
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Monthly Leakage</p>
-                    <h4 id="total-val" class="text-4xl font-800 text-slate-800">$0.00</h4>
-                    <div class="mt-6 h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                        <div id="pBar" class="h-full bg-indigo-500 transition-all duration-1000" style="width: 100%"></div>
-                    </div>
+            <aside class="lg:col-span-4 space-y-10">
+                <div class="frosted shape-hex p-12 text-center reveal">
+                    <p class="text-[10px] font-black text-slate-400 uppercase mb-2">Total Energy Leak</p>
+                    <h4 id="leak-val" class="text-4xl font-800 text-slate-900">$0.00</h4>
                 </div>
 
-                <div class="frosted-glass p-8 rounded-[2.5rem] reveal">
-                    <h4 class="text-xs font-800 text-slate-800 mb-4">Mind-Finance Journal</h4>
-                    <textarea id="journal" oninput="saveJournal()" class="w-full bg-transparent border-none focus:ring-0 text-sm h-32 italic text-slate-500" placeholder="Note the subconscious trigger..."></textarea>
+                <div class="frosted p-8 rounded-[3rem] reveal">
+                    <h4 class="text-xs font-black text-slate-400 uppercase mb-6">Activity Heatmap</h4>
+                    <div class="grid grid-cols-7 gap-2" id="heatmap"></div>
                 </div>
 
+                <div class="frosted p-8 rounded-[3rem] reveal">
+                    <h4 class="text-xs font-bold text-slate-800 mb-4 uppercase">Neural Journal</h4>
+                    <textarea id="journal" oninput="saveJournal()" class="w-full bg-transparent border-none text-sm h-40 italic text-slate-500 leading-relaxed outline-none" placeholder="What was the subconscious trigger?"></textarea>
+                </div>
+
+                <button onclick="startReset()" class="w-full py-4 text-[10px] font-black text-slate-300 uppercase hover:text-rose-500 transition tracking-[0.4em]">Initialize Neural Reset</button>
             </aside>
         </div>
     </div>
@@ -119,46 +131,90 @@
     <script>
         let score = parseInt(localStorage.getItem('zenScore')) || 100;
         let logs = JSON.parse(localStorage.getItem('zenLogs')) || [];
+        let scoreHistory = JSON.parse(localStorage.getItem('zenHistory')) || [100];
+        let logicAns = 0;
 
-        function updateUI() {
-            document.getElementById('mainScore').innerText = score;
-            document.getElementById('score-val').innerText = `${score} PTS`;
-            document.getElementById('pBar').style.width = score + "%";
-            
-            const feed = document.getElementById('feed');
-            feed.innerHTML = '';
-            let total = 0;
+        const wisdom = [
+            "Neuroplasticity: Every refusal of impulse builds physical neural tissue.",
+            "Evolutionary Biology: Shopping triggers the same dopamine as gathering.",
+            "The Amygdala Hijack: Stress makes spending feel like survival.",
+            "Intentionality is the highest human cognitive function."
+        ];
 
-            logs.forEach(log => {
-                total += parseFloat(log.amount);
-                const card = document.createElement('div');
-                card.className = "frosted-glass p-6 rounded-[2rem] flex justify-between items-center reveal active " + (log.isNeed ? 'border-l-8 border-cyan-400' : 'shape-blob border-l-8 border-rose-400');
-                card.innerHTML = `
-                    <div>
-                        <p class="font-800 text-slate-800">${log.item}</p>
-                        <p class="text-[9px] text-slate-400 uppercase font-bold">${log.isNeed ? 'Logical Asset' : 'Subconscious Urge'}</p>
-                    </div>
-                    <p class="text-2xl font-800 ${log.isNeed ? 'text-cyan-600' : 'text-rose-500'}">$${log.amount}</p>
-                `;
-                feed.prepend(card);
-            });
-
-            document.getElementById('total-val').innerText = `$${total.toFixed(2)}`;
-            localStorage.setItem('zenScore', score);
-            localStorage.setItem('zenLogs', JSON.stringify(logs));
-            initReveal();
+        function processEntry(isNeed) {
+            if (!isNeed) {
+                const overlay = document.getElementById('timerOverlay');
+                let count = 10;
+                overlay.style.display = 'flex';
+                const t = setInterval(() => {
+                    count--;
+                    document.getElementById('countdown').innerText = count;
+                    if(count <= 0) { clearInterval(t); overlay.style.display = 'none'; executeAdd(false); }
+                }, 1000);
+            } else { executeAdd(true); }
         }
 
-        function addEntry(isNeed) {
+        function executeAdd(isNeed) {
             const item = document.getElementById('item').value;
             const amount = document.getElementById('amount').value;
             if(!item || !amount) return;
-            isNeed ? score = Math.min(100, score + 5) : score = Math.max(0, score - Math.floor(amount/3));
-            logs.push({item, amount, isNeed});
-            document.getElementById('item').value = ''; document.getElementById('amount').value = '';
+            isNeed ? score = Math.min(100, score + 5) : score = Math.max(0, score - Math.floor(amount/3.5));
+            logs.push({item, amount, isNeed, date: new Date().toLocaleTimeString()});
+            scoreHistory.push(score);
+            if(scoreHistory.length > 20) scoreHistory.shift();
+            document.getElementById('wisdom-bar').innerText = wisdom[Math.floor(Math.random()*wisdom.length)];
             updateUI();
         }
 
+        function updateUI() {
+            document.getElementById('mainScore').innerText = score;
+            document.getElementById('nav-score').innerText = score;
+            document.getElementById('pBar').style.width = score + "%";
+            
+            const feed = document.getElementById('feed'); feed.innerHTML = '';
+            let totalLeak = 0;
+            logs.forEach(log => {
+                if(!log.isNeed) totalLeak += parseFloat(log.amount);
+                const card = document.createElement('div');
+                card.className = "frosted p-8 rounded-[3rem] flex justify-between items-center reveal active transition-all border-l-8 " + (log.isNeed ? 'border-cyan-500' : 'border-rose-500');
+                card.innerHTML = `<div><p class="font-800 text-slate-800">${log.item}</p><p class="text-[9px] text-slate-400 uppercase font-black">${log.isNeed?'Logic':'Impulse'}</p></div><p class="text-2xl font-800">$${log.amount}</p>`;
+                feed.prepend(card);
+            });
+
+            document.getElementById('leak-val').innerText = `$${totalLeak.toFixed(2)}`;
+            document.getElementById('opp-cost').innerText = `$${(totalLeak * 2.15).toFixed(2)}`;
+            document.getElementById('time-leak').innerText = (totalLeak / 15).toFixed(1) + " hrs"; // Assuming $15/hr avg
+
+            // Sparkline Draw
+            const path = document.getElementById('flux-path');
+            let d = "M 0 " + (50 - scoreHistory[0]/2);
+            scoreHistory.forEach((s, i) => { d += ` L ${(i * 10)} ${(50 - s/2)}`; });
+            path.setAttribute('d', d);
+
+            // Aura & Rank
+            document.getElementById('aura').style.setProperty('--aura-1', score > 75 ? 'rgba(6, 182, 212, 0.15)' : 'rgba(244, 63, 94, 0.15)');
+            document.getElementById('pulse').style.borderColor = score > 75 ? 'rgba(6, 182, 212, 0.05)' : 'rgba(244, 63, 94, 0.05)';
+            document.getElementById('rank-name').innerText = score === 100 ? "Stage: Zenith Sovereign" : (score > 75 ? "Stage: Sentinel" : "Stage: Acolyte");
+
+            localStorage.setItem('zenScore', score); localStorage.setItem('zenLogs', JSON.stringify(logs));
+            localStorage.setItem('zenHistory', JSON.stringify(scoreHistory));
+            initReveal();
+        }
+
+        // Feature: Logic Reset Test
+        function startReset() {
+            const num1 = Math.floor(Math.random() * 20);
+            const num2 = Math.floor(Math.random() * 20);
+            logicAns = num1 + num2;
+            document.getElementById('logicQuestion').innerText = `What is ${num1} + ${num2}?`;
+            document.getElementById('resetModal').style.display = 'flex';
+        }
+        function checkLogic() {
+            if(parseInt(document.getElementById('logicAnswer').value) === logicAns) {
+                localStorage.clear(); location.reload();
+            } else { alert("Logic Mismatch. Prefrontal cortex not engaged."); closeReset(); }
+        }
+        function closeReset() { document.getElementById('resetModal').style.display = 'none'; }
         function saveJournal() { localStorage.setItem('zenJournal', document.getElementById('journal').value); }
         function initReveal() {
             const obs = new IntersectionObserver((e) => { e.forEach(x => { if(x.isIntersecting) x.target.classList.add('active'); }); });
